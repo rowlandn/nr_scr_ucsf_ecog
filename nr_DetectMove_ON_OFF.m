@@ -1,0 +1,375 @@
+function [move_onset,move_offset,bad_move_onset,bad_move_offset] = nr_DetectMove_ON_OFF(time,ipad,emg,aux,go_signal,stop_signal)
+
+
+
+%   Detects onset of signal, created for use in time_psd analysis
+%	Input:
+%       time    - vector containing time, assuming sampling rate of 1kHz
+%       signal     - vector containing signal data, assuming sampling rate of 1kHz
+%       epoch   - active epoch timestamps to be used for signal alignment
+%	Output:
+%       signal_onset   - vector containing user-defined signal onset timestamps
+%
+%   Created by: S.Shimamoto 11/6/2008
+
+
+% Initialize variables
+rest_bl = [-6 -3]; % seconds before epoch timestamp used for baseline signal activity
+rest_bl2 = [3 5];% seconds after epoch timestamp used for baseline signal activity
+move_on_test = [0 8]; % seconds around epoch timestamp to test signal
+move_off_test = [0 3]; % seconds around epoch timestamp to test signal
+
+n_epoch = length(go_signal);
+move_onset = nan*zeros(1,n_epoch);
+move_offset = nan*zeros(1,n_epoch);
+bad_move_onset = nan*zeros(1,n_epoch);
+bad_move_offset = nan*zeros(1,n_epoch);
+
+c = [];
+
+
+
+if length(emg.chan) == 4
+
+    % EMG Chan 1
+    emgchan_1 = emg.chan(1).raw;
+    std_emgchan_1 = std(emgchan_1)*5;
+    emgchan_1_plus_std = emgchan_1 + std_emgchan_1;
+    emgchan_1_plus_std_norm_1 = emgchan_1_plus_std/(std_emgchan_1*2);
+    signal1_sc = emgchan_1_plus_std_norm_1;
+
+    % EMG Chan 2
+    emgchan_2 = emg.chan(2).raw;
+    std_emgchan_2 = std(emgchan_2)*5;
+    emgchan_2_plus_std = emgchan_2 + std_emgchan_2;
+    emgchan_2_plus_std_norm_1 = emgchan_2_plus_std/(std_emgchan_2*2);
+    signal2_sc = emgchan_2_plus_std_norm_1;
+    
+    % EMG Chan 3
+    emgchan_3 = emg.chan(3).raw;
+    std_emgchan_3 = std(emgchan_3)*5;
+    emgchan_3_plus_std = emgchan_3 + std_emgchan_3;
+    emgchan_3_plus_std_norm_1 = emgchan_3_plus_std/(std_emgchan_3*2);
+    signal3_sc = emgchan_3_plus_std_norm_1;
+
+    % EMG Chan 4
+    emgchan_4 = emg.chan(4).raw;
+    std_emgchan_4 = std(emgchan_4)*5;
+    emgchan_4_plus_std = emgchan_4 + std_emgchan_4;
+    emgchan_4_plus_std_norm_1 = emgchan_4_plus_std/(std_emgchan_4*2);
+    signal4_sc = emgchan_4_plus_std_norm_1;
+    
+    % Aux Chan 1
+    auxchan_1 = aux.chan(1).raw;
+    auxchan_1_begin = auxchan_1(100);
+    auxchan_1_end = auxchan_1(end-100);
+    auxchan_1(1:100) = linspace(auxchan_1_begin,auxchan_1_begin,100);
+    auxchan_1(end-100:end) = linspace(auxchan_1_end,auxchan_1_end,101);
+    auxchan_1_min = min(auxchan_1);
+    auxchan_1_zero = auxchan_1-auxchan_1_min;
+    auxchan_1_max_zero = max(auxchan_1_zero);
+    auxchan_1_one_zero = auxchan_1_zero/auxchan_1_max_zero;
+    signal5_sc = auxchan_1_one_zero;
+
+    % Aux Chan 2
+    auxchan_2 = aux.chan(2).raw;
+    auxchan_2_begin = auxchan_2(100);
+    auxchan_2_end = auxchan_2(end-100);
+    auxchan_2(1:100) = linspace(auxchan_2_begin,auxchan_2_begin,100);
+    auxchan_2(end-100:end) = linspace(auxchan_2_end,auxchan_2_end,101);
+    auxchan_2_min = min(auxchan_2);
+    auxchan_2_zero = auxchan_2-auxchan_2_min;
+    auxchan_2_max_zero = max(auxchan_2_zero);
+    auxchan_2_one_zero = auxchan_2_zero/auxchan_2_max_zero;
+    signal6_sc = auxchan_2_one_zero;
+
+    % Aux Chan 3
+    auxchan_3 = aux.chan(3).raw;
+    auxchan_3_begin = auxchan_3(100);
+    auxchan_3_end = auxchan_3(end-100);
+    auxchan_3(1:100) = linspace(auxchan_3_begin,auxchan_3_begin,100);
+    auxchan_3(end-100:end) = linspace(auxchan_3_end,auxchan_3_end,101);
+    auxchan_3_min = min(auxchan_3);
+    auxchan_3_zero = auxchan_3-auxchan_3_min;
+    auxchan_3_max_zero = max(auxchan_3_zero);
+    auxchan_3_one_zero = auxchan_3_zero/auxchan_3_max_zero;
+    signal7_sc = auxchan_3_one_zero;
+    
+elseif length(emg.chan) == 2
+    
+    % EMG Chan 1
+    emgchan_1 = emg.chan(1).raw;
+    std_emgchan_1 = std(emgchan_1)*5;
+    emgchan_1_plus_std = emgchan_1 + std_emgchan_1;
+    emgchan_1_plus_std_norm_1 = emgchan_1_plus_std/(std_emgchan_1*2);
+    signal1_sc = emgchan_1_plus_std_norm_1;
+
+    % EMG Chan 2
+    emgchan_2 = emg.chan(2).raw;
+    std_emgchan_2 = std(emgchan_2)*5;
+    emgchan_2_plus_std = emgchan_2 + std_emgchan_2;
+    emgchan_2_plus_std_norm_1 = emgchan_2_plus_std/(std_emgchan_2*2);
+    signal2_sc = emgchan_2_plus_std_norm_1;
+    
+    % Aux Chan 1
+    auxchan_1 = aux.chan(1).raw;
+    auxchan_1_begin = auxchan_1(100);
+    auxchan_1_end = auxchan_1(end-100);
+    auxchan_1(1:100) = linspace(auxchan_1_begin,auxchan_1_begin,100);
+    auxchan_1(end-100:end) = linspace(auxchan_1_end,auxchan_1_end,101);
+    auxchan_1_min = min(auxchan_1);
+    auxchan_1_zero = auxchan_1-auxchan_1_min;
+    auxchan_1_max_zero = max(auxchan_1_zero);
+    auxchan_1_one_zero = auxchan_1_zero/auxchan_1_max_zero;
+    signal5_sc = auxchan_1_one_zero;
+
+    % Aux Chan 2
+    auxchan_2 = aux.chan(2).raw;
+    auxchan_2_begin = auxchan_2(100);
+    auxchan_2_end = auxchan_2(end-100);
+    auxchan_2(1:100) = linspace(auxchan_2_begin,auxchan_2_begin,100);
+    auxchan_2(end-100:end) = linspace(auxchan_2_end,auxchan_2_end,101);
+    auxchan_2_min = min(auxchan_2);
+    auxchan_2_zero = auxchan_2-auxchan_2_min;
+    auxchan_2_max_zero = max(auxchan_2_zero);
+    auxchan_2_one_zero = auxchan_2_zero/auxchan_2_max_zero;
+    signal6_sc = auxchan_2_one_zero;
+
+    % Aux Chan 3
+    auxchan_3 = aux.chan(3).raw;
+    auxchan_3_begin = auxchan_3(100);
+    auxchan_3_end = auxchan_3(end-100);
+    auxchan_3(1:100) = linspace(auxchan_3_begin,auxchan_3_begin,100);
+    auxchan_3(end-100:end) = linspace(auxchan_3_end,auxchan_3_end,101);
+    auxchan_3_min = min(auxchan_3);
+    auxchan_3_zero = auxchan_3-auxchan_3_min;
+    auxchan_3_max_zero = max(auxchan_3_zero);
+    auxchan_3_one_zero = auxchan_3_zero/auxchan_3_max_zero;
+    signal7_sc = auxchan_3_one_zero;
+    
+elseif length(emg.chan) == 1
+    
+    % EMG Chan 1
+    emgchan_1 = emg.chan(1).raw;
+    std_emgchan_1 = std(emgchan_1)*5;
+    emgchan_1_plus_std = emgchan_1 + std_emgchan_1;
+    emgchan_1_plus_std_norm_1 = emgchan_1_plus_std/(std_emgchan_1*2);
+    signal1_sc = emgchan_1_plus_std_norm_1;
+    
+    % Aux Chan 1
+    auxchan_1 = aux.chan(1).raw;
+    auxchan_1_begin = auxchan_1(100);
+    auxchan_1_end = auxchan_1(end-100);
+    auxchan_1(1:100) = linspace(auxchan_1_begin,auxchan_1_begin,100);
+    auxchan_1(end-100:end) = linspace(auxchan_1_end,auxchan_1_end,101);
+    auxchan_1_min = min(auxchan_1);
+    auxchan_1_zero = auxchan_1-auxchan_1_min;
+    auxchan_1_max_zero = max(auxchan_1_zero);
+    auxchan_1_one_zero = auxchan_1_zero/auxchan_1_max_zero;
+    signal5_sc = auxchan_1_one_zero;
+
+    % Aux Chan 2
+    auxchan_2 = aux.chan(2).raw;
+    auxchan_2_begin = auxchan_2(100);
+    auxchan_2_end = auxchan_2(end-100);
+    auxchan_2(1:100) = linspace(auxchan_2_begin,auxchan_2_begin,100);
+    auxchan_2(end-100:end) = linspace(auxchan_2_end,auxchan_2_end,101);
+    auxchan_2_min = min(auxchan_2);
+    auxchan_2_zero = auxchan_2-auxchan_2_min;
+    auxchan_2_max_zero = max(auxchan_2_zero);
+    auxchan_2_one_zero = auxchan_2_zero/auxchan_2_max_zero;
+    signal6_sc = auxchan_2_one_zero;
+
+    % Aux Chan 3
+    auxchan_3 = aux.chan(3).raw;
+    auxchan_3_begin = auxchan_3(100);
+    auxchan_3_end = auxchan_3(end-100);
+    auxchan_3(1:100) = linspace(auxchan_3_begin,auxchan_3_begin,100);
+    auxchan_3(end-100:end) = linspace(auxchan_3_end,auxchan_3_end,101);
+    auxchan_3_min = min(auxchan_3);
+    auxchan_3_zero = auxchan_3-auxchan_3_min;
+    auxchan_3_max_zero = max(auxchan_3_zero);
+    auxchan_3_one_zero = auxchan_3_zero/auxchan_3_max_zero;
+    signal7_sc = auxchan_3_one_zero;
+    
+elseif length(emg.chan) == 0
+    
+    % Aux Chan 1
+    auxchan_1 = aux.chan(1).raw;
+    auxchan_1_begin = auxchan_1(100);
+    auxchan_1_end = auxchan_1(end-100);
+    auxchan_1(1:100) = linspace(auxchan_1_begin,auxchan_1_begin,100);
+    auxchan_1(end-100:end) = linspace(auxchan_1_end,auxchan_1_end,101);
+    auxchan_1_min = min(auxchan_1);
+    auxchan_1_zero = auxchan_1-auxchan_1_min;
+    auxchan_1_max_zero = max(auxchan_1_zero);
+    auxchan_1_one_zero = auxchan_1_zero/auxchan_1_max_zero;
+    signal5_sc = auxchan_1_one_zero;
+
+    if ~isempty('aux.chan(2).raw') % needed because ec_ep_0027 has no aux chan 2
+        % Aux Chan 2
+        auxchan_2 = aux.chan(2).raw;
+        auxchan_2_begin = auxchan_2(100);
+        auxchan_2_end = auxchan_2(end-100);
+        auxchan_2(1:100) = linspace(auxchan_2_begin,auxchan_2_begin,100);
+        auxchan_2(end-100:end) = linspace(auxchan_2_end,auxchan_2_end,101);
+        auxchan_2_min = min(auxchan_2);
+        auxchan_2_zero = auxchan_2-auxchan_2_min;
+        auxchan_2_max_zero = max(auxchan_2_zero);
+        auxchan_2_one_zero = auxchan_2_zero/auxchan_2_max_zero;
+        signal6_sc = auxchan_2_one_zero;
+    else
+        signal6_sc = linspace(1,1,length(aux.chan(1).raw));
+    end
+
+    % Aux Chan 3
+    auxchan_3 = aux.chan(3).raw;
+    auxchan_3_begin = auxchan_3(100);
+    auxchan_3_end = auxchan_3(end-100);
+    auxchan_3(1:100) = linspace(auxchan_3_begin,auxchan_3_begin,100);
+    auxchan_3(end-100:end) = linspace(auxchan_3_end,auxchan_3_end,101);
+    auxchan_3_min = min(auxchan_3);
+    auxchan_3_zero = auxchan_3-auxchan_3_min;
+    auxchan_3_max_zero = max(auxchan_3_zero);
+    auxchan_3_one_zero = auxchan_3_zero/auxchan_3_max_zero;
+    signal7_sc = auxchan_3_one_zero;
+    
+end
+    
+
+
+for i = 1:n_epoch
+    
+    stop_time=[];
+    start_time=[];
+    % Baseline at rest before mvte
+    rest_inds = find(time > (go_signal(i)+rest_bl(1)) & time<(go_signal(i)+rest_bl(2)));
+    if length(emg.chan) == 0
+        signal = signal5_sc; %will need to change this when you create a better automated method
+    else
+        signal = signal1_sc;
+    end
+    rest_mn = mean(signal(rest_inds));
+    %signal = abs(signal-rest_mn);
+    %rest_mn = mean(signal(rest_inds));
+    rest_sd = std(signal(rest_inds));
+    THRESH1 = rest_mn +2*rest_sd;
+    
+    % plot baseline and threshold
+    figure
+    hold on
+    
+    if length(emg.chan) == 4
+        plot(time,signal4_sc,'y')
+        plot(time,signal3_sc,'m')
+        plot(time,signal2_sc,'c')
+        plot(time,signal1_sc,'k')
+        plot(time,signal6_sc+1,'k')
+        plot(time,signal7_sc+2)
+        ylim1 = get(gca,'Ylim');
+    elseif length(emg.chan) == 2
+        plot(time,signal2_sc,'c')
+        plot(time,signal1_sc,'k')
+        plot(time,signal6_sc+1,'k')
+        plot(time,signal7_sc+2)
+        ylim1 = get(gca,'YLim');
+    elseif length(emg.chan) == 1
+        plot(time,signal1_sc,'c')
+        plot(time,signal6_sc+1,'k')
+        plot(time,signal7_sc+2)
+        ylim1 = get(gca,'YLim');
+    elseif length(emg.chan) == 0
+        plot(time,signal6_sc,'c')
+        plot(time,signal7_sc,'k')
+        ylim1 = get(gca,'YLim');
+    end
+    
+    plot([ipad.events_sc.prep_OFF_sc(i)/1000 ipad.events_sc.prep_OFF_sc(i)/1000],[ylim1(1) ylim1(2)],'g','LineWidth',2)
+    plot([ipad.events_sc.sound_ON_sc(i+1)/1000 ipad.events_sc.sound_ON_sc(i+1)/1000],[ylim1(1) ylim1(2)],'r','LineWidth',2)
+    
+    xlim([go_signal(i)-5 go_signal(i)+15]);
+    xlm = xlim;
+    plot(xlm,[THRESH1 THRESH1],'r:');
+    title(['epoch #' num2str(i)]);
+    xlabel('time (sec)');
+    ylabel('signal activity');
+    ylm = ylim1;
+    
+    % Find move on
+    move_on_inds = find(time>(go_signal(i)+move_on_test(1)) & time<(go_signal(i)+move_on_test(2)));
+    start_ind = find(signal(move_on_inds)>THRESH1);
+    xx = nr_evFindGroups(start_ind,1,5);
+    if ~isempty(xx)
+        start_time = time(move_on_inds(start_ind(xx(1))));
+    end
+    plot([go_signal(i) go_signal(i)],ylm,'k:');
+    if ~isempty(start_time)
+        plot([start_time start_time],ylm, 'r')
+    end
+    % change move on if not correct
+    [x,y] = ginput(1);
+    if ~isempty(x)
+        start_time = x;
+%         plot([start_time start_time],ylm, 'm')
+    end
+    move_onset(i) = start_time;
+    
+    % Find move off
+    xx = nr_evFindGroups(start_ind,1,70);
+    if ~isempty(xx)
+        stop_time = time(move_on_inds(start_ind(xx(end))));
+%         plot([stop_signal(i) stop_signal(i)],ylm,'k:');
+    end
+    
+    if ~isempty(stop_time)
+        plot([stop_time stop_time],ylm, 'r')
+    end
+    % change move on if not correct
+    [x,y] = ginput(1);
+    if ~isempty(x)
+        stop_time = x;
+        plot([stop_time stop_time],ylm, 'm')
+    end
+    move_offset(i) = stop_time;
+    
+    % Find inappropriate movements
+    %     THRESH1 = rest_mn +8*rest_sd;
+    if 1>1
+        bad_move_inds = find(time>(move_offset(i-1)+3) & time<(go_signal(i)-1));
+    else
+        bad_move_inds = find(time>(go_signal(i)-5) & time<(go_signal(i)-1));
+    end
+    
+    bad_ind = find(signal(bad_move_inds)>THRESH1);
+    xx = nr_evFindGroups(bad_ind,1,40);
+    if ~isempty (xx)
+        bad_time = time(bad_move_inds(bad_ind(xx(1))));
+        bad_move_onset(i) = bad_time;
+        plot([bad_time bad_time],ylm, 'b')
+        % change move on if not correct
+        [x,y] = ginput(1);
+        if ~isempty(x)
+            bad_time = x;
+            plot([bad_time bad_time],ylm, 'c')
+        end
+        bad_move_onset(i) = bad_time;
+        
+        bad_time = time(bad_move_inds(bad_ind(xx(end))));
+        bad_move_offset(i) = bad_time;
+        plot([bad_time bad_time],ylm, 'b')
+        % change move on if not correct
+        [x,y] = ginput(1);
+        if ~isempty(x)
+            bad_time = x;
+            plot([bad_time bad_time],ylm, 'c')
+        end
+        bad_move_offset(i) = bad_time;
+    end
+    close
+end
+
+return;
+
+
+
+

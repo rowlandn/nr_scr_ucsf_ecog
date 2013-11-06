@@ -1,0 +1,16 @@
+function nr_auxchan_lbl(sbj, cond, chan1, chan2, chan3, chan4, chan5, chan6, chan7, chan8, dir)
+
+% This function organizes auxiliary channel data labels into a structure that can
+% be saved along with analog data files
+
+for i = 1:8
+    header_eval = ['auxchan_lbl.',cond,'.chan',num2str(i),' = chan',num2str(i),';'];
+    eval(header_eval)
+end
+
+cd(dir)
+
+save_eval = ['save(''',sbj,'_auxchan_lbl'',''auxchan_lbl'');'];
+eval(save_eval)
+
+
