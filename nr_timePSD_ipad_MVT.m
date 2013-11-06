@@ -112,6 +112,7 @@ for i = 1:n_data_ch
         snip = data(first:last);
         %calculate spectrogram of snippet 3D matrix 'S' has the fft power value stored in [frequncy,time,epoch number] arrangement
         S(:,:,j) = spectrogram(snip,WINDOW,NOVERLAP,NFFT,Fs); %#ok<AGROW>
+        %spectrogram(snip,WINDOW,NOVERLAP,NFFT,Fs); %#ok<AGROW>
     end
 
     %find the magnitude of the fft represented in each column of S
@@ -127,6 +128,7 @@ for i = 1:n_data_ch
 end
 
 %setup up the frequency (faxis)and time (taxis) axes data
+assignin('base','S_mag_mean',S_mag_mean)
 [nfchans,nframes] = size(S_mag_mean(:,:,1));
 nfchansteps = nfchans - 1;
 maxfreq = Fs/2;
@@ -164,6 +166,10 @@ clims1 = [val1 val2];
 data_ch_names = {'e12','e23','e34','e45','e56','LFP'};
 
 assignin('base','A2plot',A2plot)
+assignin('base','taxis',taxis)
+assignin('base','faxis',faxis)
+assignin('base','clims1',clims1)
+
 
 for i = 1:n_data_ch
     subplot(2,3,i);
@@ -200,7 +206,6 @@ colorbar([0.9307 0.1048 0.02354 0.8226]);
 % %saveas(hf1,[filename '_timePSD_Mvt_on'],'fig');
 % saveas(hf1,[filename(1:11),'fig_spc_ecg_mvn_',filename(20:end-4)],'fig');
 % print(hf1,[filename(1:11),'pdf_spc_ecg_mvn_',filename(20:end-4)],'-dpdf');
-
 
 
 % FOR MOVE OFFSET
@@ -314,6 +319,7 @@ num_fig = findall(0,'type','figure');
 for i = 1:num_fig
     print(i,'-dpsc2',['fig_temp_',sbj],'-append')
 end
+
 
 %ps2pdf('psfile',['fig_temp_',sbj,'.ps'],'pdffile',['fig_pdf_',sbj,'.pdf'],'gspapersize','a4', 'deletepsfile', 1)
 
