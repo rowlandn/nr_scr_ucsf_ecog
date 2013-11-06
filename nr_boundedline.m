@@ -9,7 +9,7 @@ function varargout = boundedline(varargin)
 % [hl, hp] = boundedline(..., 'transparency', trans)
 % [hl, hp] = boundedline(..., 'orientation', orient)
 % [hl, hp] = boundedline(..., 'cmap', cmap)
-%
+% test comment here
 % Input variables:
 %
 %   x, y:       x and y values, either vectors of the same length, matrices
