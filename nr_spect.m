@@ -402,7 +402,7 @@ colorbar([0.9307 0.1048 0.02354 0.8226]);
 %         saveas(hf1,[name(1:end-5) '_timePSD_Mvt'],'fig');
 %         saveas(hf2,[name(1:end-5) '_timeCOH_Mvt'],'fig');
 % else
-save(['spec_',sub],'A2plot','A2plot_off','faxis','taxis','move_onset','move_offset','M1_ch','S_mag_mean','S_off_mag_mean');
+save(['spec_',sub],'A2plot','A2plot_off','faxis','taxis','move_onset','move_offset');
 %         %save([filename '_timePSD_Mvt.mat'],'A2plot','A2plot_off','faxis','taxis','move_onset','move_offset','M1_ch','S_mag_mean','S_off_mag_mean');
 %         saveas(hf1,[name(1:end-5) '_timePSD_Mvt'],'fig');
 % end
