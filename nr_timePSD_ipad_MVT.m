@@ -128,7 +128,7 @@ for i = 1:n_data_ch
 end
 
 %setup up the frequency (faxis)and time (taxis) axes data
-assignin('base','S_mag_mean',S_mag_mean)
+%assignin('base','S_mag_mean',S_mag_mean)
 [nfchans,nframes] = size(S_mag_mean(:,:,1));
 nfchansteps = nfchans - 1;
 maxfreq = Fs/2;
@@ -165,10 +165,10 @@ val2 = max(max(max(A2plot(1:100,:,:))));
 clims1 = [val1 val2];
 data_ch_names = {'e12','e23','e34','e45','e56','LFP'};
 
-assignin('base','A2plot',A2plot)
-assignin('base','taxis',taxis)
-assignin('base','faxis',faxis)
-assignin('base','clims1',clims1)
+% assignin('base','A2plot',A2plot)
+% assignin('base','taxis',taxis)
+% assignin('base','faxis',faxis)
+% assignin('base','clims1',clims1)
 
 
 for i = 1:n_data_ch

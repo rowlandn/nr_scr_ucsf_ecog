@@ -172,6 +172,8 @@ clims1 = [val1 val2];
 
 M1_ch=M1_ch1;
 
+assignin('base','A2plot_orig',A2plot)
+
 for i = 1:n_data_ch/2
 %     for j = 1:round(n_data_ch/16)
 %     if i == 17 | i == 33 

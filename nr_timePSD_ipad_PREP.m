@@ -127,20 +127,20 @@ else
     first = int32(((PRE-BL(1))/t_res)+1);
     last = int32((PRE-BL(2))/t_res);
     % to plot A with colors representing the log10 of power, uncomment this line:
-    A2plot = log10(S_mag_mean);
+    A2plot_rp = log10(S_mag_mean);
     % to plot A with colors representing raw data values, uncomment this line:
     % A2plot = S_move_mag_mean;
     for i = 1:n_data_ch
         %echo('plotting')
         for j = 1:nfchans
-            bl = A2plot(j,first:last,i);
+            bl = A2plot_rp(j,first:last,i);
             blmean = mean(bl);
-            A2plot(j,:,i) = A2plot(j,:,i)/blmean; 
+            A2plot_rp(j,:,i) = A2plot_rp(j,:,i)/blmean; 
         end
     end    
 end
 
-
+assignin('base','A2plot_rp',A2plot_rp)
 
 %% calculate time-varying transformed coherence
 
@@ -178,10 +178,11 @@ end
 
 %% plot data
 
+%assignin('base','A2plot_rp',A2plot_rp)
 % plot MOVEMENT ONSET spectrogram for all ecog/lfp data 
 hf1 = figure;
-val1 = min(min(min(A2plot(1:100,:,:))));
-val2 = max(max(max(A2plot(1:100,:,:))));
+val1 = min(min(min(A2plot_rp(1:100,:,:))));
+val2 = max(max(max(A2plot_rp(1:100,:,:))));
 clims1 = [val1 val2];
 data_ch_names = {'e12','e23','e34','e45','e56','LFP'};
 
@@ -189,7 +190,7 @@ for i = 1:n_data_ch
     subplot(2,3,i);
     hold(gca,'on');
     % make the time-frequency plot
-    tmp1 = A2plot(1:100,:,i); %chopping A2plot will allow the whole colobar to be represented
+    tmp1 = A2plot_rp(1:100,:,i); %chopping A2plot will allow the whole colobar to be represented
     faxis_new = faxis(1:100);
     imagesc(taxis,faxis_new,tmp1,clims1);
 %     imagesc(taxis,faxis,A2plot(:,:,i),clims1);
