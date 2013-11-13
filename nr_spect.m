@@ -272,7 +272,7 @@ n_epochs = length(move_offset);
 for i = 1:n_data_ch
     data = ecog.contact_pair(i).remontaged_ecog_signal;
     if n_ecog == 5
-        for jj=1:length(trials_ok); %1:n_epochs
+        for jj=1:length(trials_ok)-1; %1:n_epochs
             j=trials_ok(jj);
             % take snippet of data around emg_onset from selected ecog/LFP channel add offset to increase # windows for fft
             first = int32(Fs*(move_offset(j)-(PRE))-WINDOW/2); % WINDOW/2 offset will make spectrogram start at moveonset-PRE at appropriately centered PSD
@@ -283,14 +283,15 @@ for i = 1:n_data_ch
             %spectrogram(snip,WINDOW,NOVERLAP,NFFT,Fs); %#ok<AGROW>
         end
     elseif n_ecog == 28
-        for jj=1:length(trials_ok); %1:n_epochs
-            j=trials_ok(jj);
+        for jj=1:length(trials_ok)-1;
+            j = trials_ok(jj);%1:n_epochs
+
             % take snippet of data around emg_onset from selected ecog/LFP channel add offset to increase # windows for fft
             first = int32(Fs*(move_offset(j)-(PRE))-WINDOW/2); % WINDOW/2 offset will make spectrogram start at moveonset-PRE at appropriately centered PSD
             last = int32(Fs*(move_offset(j)+(POST+ADD))-WINDOW/2);
             snip = data(first:last);
             %calculate spectrogram of snippet 3D matrix 'S' has the fft power value stored in [frequncy,time,epoch number] arrangement
-            S_off(:,:,jj) = spectrogram(snip,WINDOW,NOVERLAP,NFFT,Fs); %#ok<AGROW>
+            S_off(:,:,j) = spectrogram(snip,WINDOW,NOVERLAP,NFFT,Fs); %#ok<AGROW>
         end
     end
 
