@@ -8,7 +8,7 @@ function Comodulogram_ipad_time(name,M1)
 
 load(name)
 
-name = strrep(name,'_ecog.mat','');
+%name = strrep(name,'_ecog.mat','');
 %% General
 srate=Fs;
 

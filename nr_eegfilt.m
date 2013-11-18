@@ -44,7 +44,7 @@
 % 12-05-00 added error() calls -sm
 % 01-25-02 reformated help & license, added links -ad 
 
-function [smoothdata,filtwts] = eegfilt(data,srate,locutoff,hicutoff,epochframes,filtorder, revfilt)
+function [smoothdata,filtwts] = nr_eegfilt(data,srate,locutoff,hicutoff,epochframes,filtorder, revfilt)
 
 if nargin<4
     fprintf('');
