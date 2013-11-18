@@ -12,7 +12,7 @@ load(name)
 %% General
 srate=Fs;
 
-epoch = 1*Fs; % duration of ecah period
+epoch = 1*Fs; % duration of each period
 ecog.move_time=ecog.active_time;
 ecog.move_off_time=ecog.rest_time;
 
@@ -29,7 +29,7 @@ st_a = ecog.active_time;
 st_e = ecog.rest_time+500; % add 500 to be sure that patient is resting.
 st_off = ecog.trial_end_time;
 
-%% subdivise file into rest-prep-mvt or xs periods
+%% subdivide file into rest-prep-mvt or xs periods
 
 st_a = fix(st_a);
 st_r = fix(st_r);

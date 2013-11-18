@@ -13,7 +13,7 @@
 % MI = modulation index (see Tort et al PNAS 2008, 2009 and J Neurophysiol 2010)
 % MeanAmp = amplitude distribution over phase bins (non-normalized)
  
-function [MI,MeanAmp]=ModIndex_v2(Phase, Amp, position)
+function [MI,MeanAmp]=nr_ModIndex_v2(Phase, Amp, position)
 
 nbin=length(position);  % we are breaking 0-360o in 18 bins, ie, each bin has 20o
 winsize = 2*pi/nbin;

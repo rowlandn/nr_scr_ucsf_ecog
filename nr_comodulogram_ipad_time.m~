@@ -12,7 +12,7 @@ load(name)
 %% General
 srate=Fs;
 
-epoch = 1*Fs; % duration of ecah period
+epoch = 1*Fs; % duration of each period
 ecog.move_time=ecog.active_time;
 ecog.move_off_time=ecog.rest_time;
 
@@ -29,7 +29,7 @@ st_a = ecog.active_time;
 st_e = ecog.rest_time+500; % add 500 to be sure that patient is resting.
 st_off = ecog.trial_end_time;
 
-%% subdivise file into rest-prep-mvt or xs periods
+%% subdivide file into rest-prep-mvt or xs periods
 
 st_a = fix(st_a);
 st_r = fix(st_r);
@@ -118,7 +118,7 @@ end
 for jj=1:length(PhaseFreqVector)
     Pf1 = PhaseFreqVector(jj) - PhaseFreq_BandWidth/2;
     Pf2 = PhaseFreqVector(jj) + PhaseFreq_BandWidth/2;
-    PhaseFreq=eegfilt(lfp,srate,Pf1,Pf2); % this is just filtering
+    PhaseFreq=nr_eegfilt(lfp,srate,Pf1,Pf2); % this is just filtering
     PhaseFreqTransformed(jj, :) = angle(hilbert(PhaseFreq)); % this is getting the phase time series
 end
 toc
@@ -141,7 +141,7 @@ for kk = 1:length(pts(:,1))
         for jj=1:length(AmpFreqVector)
             counter2=counter2+1;
             
-            [MI,MeanAmp]=ModIndex_v2(PhaseFreqTransformed(ii, aa:aa+epoch), AmpFreqTransformed(jj, aa:aa+epoch), position);
+            [MI,MeanAmp]=nr_ModIndex_v2(PhaseFreqTransformed(ii, aa:aa+epoch), AmpFreqTransformed(jj, aa:aa+epoch), position);
             Comodulogram(counter0,counter1,counter2)=MI;
             x = 10:20:720;
             [val,pos]=max(MeanAmp);
