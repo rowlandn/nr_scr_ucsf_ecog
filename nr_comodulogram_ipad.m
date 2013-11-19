@@ -1,6 +1,6 @@
 function nr_comodulogram_ipad(sum_filedirnm,condition,chand,surr) 
 
-%testing git
+%testing git now we will test one last time
 load(sum_filedirnm)
 
 if ~isempty(strfind(sum_filedirnm,'ps_'))
