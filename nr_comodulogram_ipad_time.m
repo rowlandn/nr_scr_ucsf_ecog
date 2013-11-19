@@ -1,12 +1,15 @@
-
-function nr_comodulogram_ipad_time(name,M1)
-
+function nr_comodulogram_ipad_time(sum_filedirnm,condition,chand)
 
 
+load(sum_filedirnm)
 
-
-
-load(name)
+if ~isempty(strfind(sum_filedirnm,'ps_'))
+    sum_filedirnm_ps = strfind(sum_filedirnm,'ps_');
+    sbj = sum_filedirnm(sum_filedirnm_ps(1):sum_filedirnm_ps(1)+9);
+elseif ~isempty(strfind(sum_filedirnm,'ec_'))
+    sum_filedirnm_ec = strfind(sum_filedirnm,'ec_');
+    sbj = sum_filedirnm(sum_filedirnm_ec(1):sum_filedirnm_ec(1)+9);
+end
 
 %name = strrep(name,'_ecog.mat','');
 %% General
@@ -16,11 +19,63 @@ epoch = 1*Fs; % duration of each period
 ecog.move_time=ecog.active_time;
 ecog.move_off_time=ecog.rest_time;
 
+
+if chand == 'M1_ch1'
+    chan = M1_ch1;
+elseif chand == 'M1_ch2'
+    if exist('M1_ch2')
+        chan = M1_ch2;
+    else
+        chan = M1_ch1;
+    end
+elseif chand == 'S1_ch1'
+    if exist('M1_ch2')
+        chan = M1_ch1-2;
+    else
+        chan = M1_ch1-1;
+    end
+elseif chand == 'S1_ch2'
+    if exist('M1_ch2')
+        chan = M1_ch2-2;
+    else
+        chan = M1_ch1-1;
+    end
+elseif chand == 'P1_ch1'
+    if M1_ch1 < 5
+        if exist('M1_ch2')
+            chan = M1_ch1+2;
+        else
+            chan = M1_ch1+1;
+        end
+    else
+        if exist('M1_ch2')
+            chan = M1_ch1+2;
+        else
+            chan = M1_ch1;   % remember, here you are setting P1 to M1
+        end
+    end
+elseif chand == 'P1_ch2'
+    if M1_ch1 < 5
+        if exist('M1_ch2')
+            chan = M1_ch2+2;
+        else
+            chan = M1_ch1+1;
+        end
+    else
+        if exist('M1_ch2')
+            chan = M1_ch2+2;
+        else
+            chan = M1_ch1;   % remember, here you are setting P1 to M1
+        end
+    end
+end
+
+
 %% data
-if M1<5
-    lfp = ecog.contact_pair(M1).raw_ecog_signal - ecog.contact_pair(M1+1).raw_ecog_signal;
+if chan<5
+    lfp = ecog.contact_pair(chan).raw_ecog_signal - ecog.contact_pair(chan+1).raw_ecog_signal;
 else
-    lfp = ecog.contact_pair(M1).raw_ecog_signal;
+    lfp = ecog.contact_pair(chan).raw_ecog_signal;
 end
 
 st_r = ecog.trial_beg_time;
@@ -185,11 +240,70 @@ hold on
 plot(x,MI_means(x),'r*')
 x=find(pts(:,3)==3);
 plot(x,MI_means(x),'g*')
-saveas(gcf,[name '_Com_time'],'fig');
+%saveas(gcf,[sum_filedirnm '_Com_time'],'fig');
 %% test
 [P,ANOVATAB,STATS] = kruskalwallis(MI_means,pts(:,3));
 title(P)
-saveas(gcf,[name '_KW_time'],'fig');
-save([name '_Com_time'], 'Comodulogram_surr','Mean_surr','Std_surr','Comodulogram','Comodulogram_phase','lfp','MeanAmp','M1','PhaseFreqVector','PhaseFreq_BandWidth','AmpFreqVector','AmpFreq_BandWidth', 'MI_means','Phase_means','pts');
+%saveas(gcf,[sum_filedirnm '_KW_time'],'fig');
+%save(['com_time_' sbj], 'Comodulogram_surr','Mean_surr','Std_surr','Comodulogram','Comodulogram_phase','lfp','MeanAmp','chan','PhaseFreqVector','PhaseFreq_BandWidth','AmpFreqVector','AmpFreq_BandWidth', 'MI_means','Phase_means','pts','P');
+
+str_eval1 = [chand,'.Comodulogram_surr = Comodulogram_surr;'];
+eval(str_eval1)
+str_eval2 = [chand,'.Mean_surr = Mean_surr;'];
+eval(str_eval2)
+str_eval3 = [chand,'.Std_surr = Std_surr;'];
+eval(str_eval3)
+str_eval4 = [chand,'.Comodulogram = Comodulogram;'];
+eval(str_eval4)
+str_eval5 = [chand,'.Comodulogram_phase = Comodulogram_phase;'];
+eval(str_eval5)
+str_eval6 = [chand,'.lfp = lfp;'];
+eval(str_eval6)
+str_eval7 = [chand,'.MeanAmp = MeanAmp;'];
+eval(str_eval7)
+str_eval8 = [chand,'.chan = chan;'];
+eval(str_eval8)
+str_eval9 = [chand,'.PhaseFreqVector = PhaseFreqVector;'];
+eval(str_eval9)
+str_eval10 = [chand,'.PhaseFreq_BandWidth = PhaseFreq_BandWidth;'];
+eval(str_eval10)
+str_eval11 = [chand,'.AmpFreqVector = AmpFreqVector;'];
+eval(str_eval11)
+str_eval12 = [chand,'.AmpFreq_BandWidth = AmpFreq_BandWidth;'];
+eval(str_eval12)
+str_eval13 = [chand,'.MI_means = MI_means;'];
+eval(str_eval13)
+str_eval14 = [chand,'.Phase_means = Phase_means;'];
+eval(str_eval14)
+str_eval15 = [chand,'.pts = pts;'];
+eval(str_eval15)
+str_eval16 = [chand,'.P = P;'];
+eval(str_eval16)
+
+mfnm = mfilename;
 
 
+if ~exist(['com_',sbj,'.mat'],'file')
+    allt = struct('prelead',[],'postlead',[]);
+    tres = struct('prelead',[],'postlead',[]);
+    if strcmp(mfnm,'nr_comodulogram_ipad') == 1
+        allt_eval = ['allt.',condition,'.',chand,' = ',chand,';'];
+        eval(allt_eval)
+        save(['com_',sbj],'allt','tres')
+    elseif strcmp(mfnm,'nr_comodulogram_ipad_time') == 1
+        tres_eval = ['tres.',condition,'.',chand,' = ',chand,';'];
+        eval(tres_eval)
+        save(['com_',sbj],'allt','tres')
+    end
+else
+    load(['com_',sbj])
+    if strcmp(mfnm,'nr_comodulogram_ipad') == 1
+        allt_eval = ['allt.',condition,'.',chand,' = ',chand,';'];
+        eval(allt_eval)
+        save(['com_',sbj],'allt','tres')
+    elseif strcmp(mfnm,'nr_comodulogram_ipad_time') == 1
+        tres_eval = ['tres.',condition,'.',chand,' = ',chand,';'];
+        eval(tres_eval)
+        save(['com_',sbj],'allt','tres')
+    end
+end
