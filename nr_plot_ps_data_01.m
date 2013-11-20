@@ -309,39 +309,39 @@ end
 
 set(gca,'YLim',[-2 5.5])
 
-if length(emg.chan) == 4
-    if exist('M1_ch2')
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.emg3,...
-               auxchan_lbl.prelead.emg4,auxchan_lbl.prelead.chan2,auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
-    else
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.emg3,...
-               auxchan_lbl.prelead.emg4,auxchan_lbl.prelead.chan2,auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])
-    end
-elseif length(emg.chan) == 2
-    if exist('M1_ch2')
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.chan2,...
-               auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
-    else
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.chan2,...
-               auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])
-    end
-elseif length(emg.chan) == 1
-    if exist('M1_ch2')
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.chan2,...
-               auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
-    else
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.chan2,...
-               auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])     
-    end
-elseif length(emg.chan) == 0
-    if exist('M1_ch2')
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.chan2,...
-               auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
-    else
-        legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.chan2,...
-               auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])     
-    end
-end
+% if length(emg.chan) == 4
+%     if exist('M1_ch2')
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.emg3,...
+%                auxchan_lbl.prelead.emg4,auxchan_lbl.prelead.chan2,auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
+%     else
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.emg3,...
+%                auxchan_lbl.prelead.emg4,auxchan_lbl.prelead.chan2,auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])
+%     end
+% elseif length(emg.chan) == 2
+%     if exist('M1_ch2')
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.chan2,...
+%                auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
+%     else
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.emg2,auxchan_lbl.prelead.chan2,...
+%                auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])
+%     end
+% elseif length(emg.chan) == 1
+%     if exist('M1_ch2')
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.chan2,...
+%                auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
+%     else
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.emg1,auxchan_lbl.prelead.chan2,...
+%                auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])     
+%     end
+% elseif length(emg.chan) == 0
+%     if exist('M1_ch2')
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.chan2,...
+%                auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)],['ecog',num2str(M1_ch2)])  
+%     else
+%         legend(auxchan_lbl.prelead.chan1,auxchan_lbl.prelead.chan2,...
+%                auxchan_lbl.prelead.chan3,['ecog',num2str(M1_ch1)])     
+%     end
+% end
            
            
         

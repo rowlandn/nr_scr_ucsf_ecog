@@ -107,10 +107,9 @@ ecog(1).contact_pair(3).raw_ecog_signal=resample(CECOG_3,frq1,frq2);
 ecog(1).contact_pair(4).raw_ecog_signal=resample(CECOG_4,frq1,frq2);
 ecog(1).contact_pair(5).raw_ecog_signal=resample(CECOG_5,frq1,frq2);
 
-% %%%%% uncomment if you want to store LFP
-% if ~isempty(strfind(aomatconv_filename,'lfp')) || ~isempty(strfind(aomatconv_filename,'LFP'))% evt == 1
-%     ecog(1).contact_pair(6).raw_ecog_signal=resample(CLFP,frq1,frq2);
-% end
+if ~isempty(strfind(aomatconv_filename,'lfp')) || ~isempty(strfind(aomatconv_filename,'LFP'))% evt == 1
+    ecog(1).contact_pair(6).raw_ecog_signal=resample(CLFP,frq1,frq2);
+end
 Fs = 1000;
 
 %% store processed Aux chan data into aux structure array
@@ -119,7 +118,7 @@ aux = struct('chan',{});
 aux(1).chan(1).raw=resample(CAn_In__1,frq1,frq2);
 aux(1).chan(2).raw=resample(CAn_In__2,frq1,frq2);
 aux(1).chan(3).raw=resample(CAn_In__3,frq1,frq2);
-aux.lbl = auxchan_lbl.postlead;
+aux.lbl = auxchan_lbl.prlead;
 
 %% store processed EMG chan data into aux structure array
 

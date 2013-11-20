@@ -325,11 +325,11 @@ colorbar([0.9307 0.1048 0.02354 0.8226]);
 
 
 
-cd('~/Dropbox/cluster_files/proj/lab/starr/ecog/gamma/v03/')
-    num_fig = findall(0,'type','figure');
-    for i = 1:num_fig
-    print(i,'-dpsc2',['fig_temp_',sbj],'-append')
-    end
+% cd('~/Dropbox/cluster_files/proj/lab/starr/ecog/gamma/v03/')
+%     num_fig = findall(0,'type','figure');
+%     for i = 1:num_fig
+%     print(i,'-dpsc2',['fig_temp_',sbj],'-append')
+%     end
 
 
 % save the figure

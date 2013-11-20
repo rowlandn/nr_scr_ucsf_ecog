@@ -278,14 +278,11 @@ end
 % end
 %close all
 
-%echo('plotting2')
-    cd('~/Dropbox/cluster_files/proj/lab/starr/ecog/gamma/v03/')
-    num_fig = findall(0,'type','figure');
-    %echo('plotting3')
-    for i = 1:num_fig
-    %text('printing')
-    print(i,'-dpsc2',['fig_temp_',sbj],'-append')
-    end
+%     cd('~/Dropbox/cluster_files/proj/lab/starr/ecog/gamma/v03/')
+%     num_fig = findall(0,'type','figure');
+%     for i = 1:num_fig
+%     print(i,'-dpsc2',['fig_temp_',sbj],'-append')
+%     end
 
 
 

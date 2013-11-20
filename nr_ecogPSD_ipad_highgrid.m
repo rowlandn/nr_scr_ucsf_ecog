@@ -283,7 +283,7 @@ freq = rest(1).contact_pair(1).epoch(trials_ok(1)).freq;
 % disp(['Writing ecog PSD data to:  ' outputname]);
 
 %save(outputname,'rest', 'active','prep', 'freq', 'allfreq', 'subfreq');
-save(sbj,'rest', 'active','prep', 'freq');
+save(['psd_',sbj],'rest', 'active','prep', 'freq');
 % save(fn,'rest','active','prep', 'freq','-append');
 % 
 % assignin('base','rest',rest)
@@ -438,14 +438,14 @@ end
 % % save figure
 % saveas(hf1,[fn '_PSD_raw2'],'fig');
 
-%% Print figures
-cd('~/Dropbox/cluster_files/proj/lab/starr/ecog/gamma/v03')
-num_fig = findall(0,'type','figure');
-for i = 1:num_fig
-    print(i,'-dpsc2',['fig_temp_',sbj],'-append')
-end
-
-ps2pdf('psfile',['fig_temp_',sbj,'.ps'],'pdffile',['fig_pdf_',sbj,'.pdf'],'gspapersize','a4', 'deletepsfile', 1)
+% %% Print figures
+% cd('~/Dropbox/cluster_files/proj/lab/starr/ecog/gamma/v03')
+% num_fig = findall(0,'type','figure');
+% for i = 1:num_fig
+%     print(i,'-dpsc2',['fig_temp_',sbj],'-append')
+% end
+% 
+% ps2pdf('psfile',['fig_temp_',sbj,'.ps'],'pdffile',['fig_pdf_',sbj,'.pdf'],'gspapersize','a4', 'deletepsfile', 1)
 
 %% create optional figures
 % %this plot visualizes data in allfreq

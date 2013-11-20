@@ -314,11 +314,11 @@ colorbar([0.9307 0.1048 0.02354 0.8226]);
 
 
 
-%% Print figures
-num_fig = findall(0,'type','figure');
-for i = 1:num_fig
-    print(i,'-dpsc2',['fig_temp_',sbj],'-append')
-end
+% %% Print figures
+% num_fig = findall(0,'type','figure');
+% for i = 1:num_fig
+%     print(i,'-dpsc2',['fig_temp_',sbj],'-append')
+% end
 
 
 %ps2pdf('psfile',['fig_temp_',sbj,'.ps'],'pdffile',['fig_pdf_',sbj,'.pdf'],'gspapersize','a4', 'deletepsfile', 1)
