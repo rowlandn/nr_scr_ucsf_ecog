@@ -284,18 +284,11 @@ for i = 1:n_epoch
         ylim1 = get(gca,'YLim');
     end
     
-    if i == n_epoch
-        plot([ipad.events_sc.prep_OFF_sc(i)/1000 ipad.events_sc.prep_OFF_sc(i)/1000],[ylim1(1) ylim1(2)],'g','LineWidth',2)
-        plot([ipad.events_sc.sound_ON_sc(i+1)/1000 ipad.events_sc.sound_ON_sc(i+1)/1000],[ylim1(1) ylim1(2)],'r','LineWidth',2)
-        plot([ipad.events_sc.prep_ON_sc(i)/1000 ipad.events_sc.prep_ON_sc(i)/1000],[ylim1(1) ylim1(2)],'b','LineWidth',2)
-    else
-        plot([ipad.events_sc.prep_OFF_sc(i)/1000 ipad.events_sc.prep_OFF_sc(i)/1000],[ylim1(1) ylim1(2)],'g','LineWidth',2)
-        plot([ipad.events_sc.sound_ON_sc(i+1)/1000 ipad.events_sc.sound_ON_sc(i+1)/1000],[ylim1(1) ylim1(2)],'r','LineWidth',2)
-        plot([ipad.events_sc.prep_ON_sc(i)/1000 ipad.events_sc.prep_ON_sc(i)/1000],[ylim1(1) ylim1(2)],'b','LineWidth',2)
-        plot([ipad.events_sc.prep_ON_sc(i+1)/1000 ipad.events_sc.prep_ON_sc(i+1)/1000],[ylim1(1) ylim1(2)],'b','LineWidth',2)
-    end
+    plot([ipad.events_sc.prep_OFF_sc(i)/1000 ipad.events_sc.prep_OFF_sc(i)/1000],[ylim1(1) ylim1(2)],'g','LineWidth',2)
+    plot([ipad.events_sc.sound_ON_sc(i+1)/1000 ipad.events_sc.sound_ON_sc(i+1)/1000],[ylim1(1) ylim1(2)],'r','LineWidth',2)
+    plot([ipad.events_sc.prep_ON_sc(i)/1000 ipad.events_sc.prep_ON_sc(i)/1000],[ylim1(1) ylim1(2)],'r','LineWidth',2)
     
-    xlim([go_signal(i)-10 go_signal(i)+15]);
+    xlim([go_signal(i)-10 go_signal(i)+20]);
     xlm = xlim;
     plot(xlm,[THRESH1 THRESH1],'r:');
     title(['epoch #' num2str(i)]);

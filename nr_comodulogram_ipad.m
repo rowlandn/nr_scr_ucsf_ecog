@@ -240,43 +240,43 @@ for tt = 1:4 % 1 == all trials, 2 == rest, 3== preparation, 4== mvt
     end
 end
 
-% % %% Graph comodulogram
-% % Comodulogram_surr(1,1,:)=0.00001;
-% % Clim2 = max(max(max(Comodulogram_surr)));
-% % Clim1 = min(min(min(Comodulogram_surr)));
-% % 
-% % figure
-% % hold on
-% % for tt=1:4
-% %     subplot(3,2,tt)
-% %     C=squeeze(Comodulogram_surr(:,:,tt));
-% %     contourf(PhaseFreqVector+PhaseFreq_BandWidth/2,AmpFreqVector+AmpFreq_BandWidth/2,C',30,'lines','none')
-% %     set(gca,'fontsize',9)
-% %     ylabel('Amplitude Frequency (Hz)')
-% %     xlabel('Phase Frequency (Hz)')
-% %     colorbar
-% %     caxis([Clim1 Clim2])
-% %     if tt==1
-% %         title(['all  ch=' num2str(chan)])
-% %     elseif tt==1
-% %         title(['rest  ch=' num2str(chan)])
-% %     elseif tt==1
-% %         title(['prep  ch=' num2str(chan)])
-% %     elseif tt==1
-% %         title(['mvt  ch=' num2str(chan)])
-% %     end
-% %     mean_COM_B(tt)=nanmean(nanmean(Comodulogram_surr(:,:,tt)));
-% % end
-% % subplot(3,2,5)
-% % plot(f,log10(psd_all(2:4,:)))
-% % xlim([1 200])
-% % ylim([-1 3])
-% % title('psd')
-% % subplot(3,2,6)
-% % title('accel/emg')
-% % plot(accel_all(2:4))
-% % hold on
-% % plot(emg_all(2:4)/1000,'r')
+%% Graph comodulogram
+Comodulogram_surr(1,1,:)=0.00001;
+Clim2 = max(max(max(Comodulogram_surr)));
+Clim1 = min(min(min(Comodulogram_surr)));
+
+figure
+hold on
+for tt=1:4
+    subplot(3,2,tt)
+    C=squeeze(Comodulogram_surr(:,:,tt));
+    contourf(PhaseFreqVector+PhaseFreq_BandWidth/2,AmpFreqVector+AmpFreq_BandWidth/2,C',30,'lines','none')
+    set(gca,'fontsize',9)
+    ylabel('Amplitude Frequency (Hz)')
+    xlabel('Phase Frequency (Hz)')
+    colorbar
+    caxis([Clim1 Clim2])
+    if tt==1
+        title(['all  ch=' num2str(chan)])
+    elseif tt==1
+        title(['rest  ch=' num2str(chan)])
+    elseif tt==1
+        title(['prep  ch=' num2str(chan)])
+    elseif tt==1
+        title(['mvt  ch=' num2str(chan)])
+    end
+    mean_COM_B(tt)=nanmean(nanmean(Comodulogram_surr(:,:,tt)));
+end
+subplot(3,2,5)
+plot(f,log10(psd_all(2:4,:)))
+xlim([1 200])
+ylim([-1 3])
+title('psd')
+subplot(3,2,6)
+title('accel/emg')
+plot(accel_all(2:4))
+hold on
+plot(emg_all(2:4)/1000,'r')
 
 %% save
 

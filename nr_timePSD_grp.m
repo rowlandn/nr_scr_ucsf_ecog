@@ -1,4 +1,4 @@
-function nr_timePSD_grp(timePSD_grp_data,dz,chan,phase)
+function nr_timePSD_grp(timePSD_grp_data,dz,cond,chan,phase)
 %This program is designed to generate plots of z-scores of group timePSD and
 %timeCOH data. 
 
@@ -106,6 +106,66 @@ function nr_timePSD_grp(timePSD_grp_data,dz,chan,phase)
     % calculate mean and std deviation for spectrogram data (power) across
     % subjects for a given contact pair
     
+    
+% if chan == 'M1_ch1'
+%     chan = M1_ch1;
+% elseif chan == 'M1_ch2'
+%     if exist('M1_ch2')
+%         chan = M1_ch2;
+%     else
+%         chan = M1_ch1;
+%     end
+% elseif chan == 'S1_ch1'
+%     if exist('M1_ch2')
+%         chan = M1_ch1-2;
+%     else
+%         chan = M1_ch1-1;
+%     end
+% elseif chan == 'S1_ch2'
+%     if exist('M1_ch2')
+%         chan = M1_ch2-2;
+%     else
+%         chan = M1_ch1-1;
+%     end
+% elseif chan == 'P1_ch1'
+%     if M1_ch1 < 5
+%         if exist('M1_ch2')
+%             chan = M1_ch1+2;
+%         else
+%             chan = M1_ch1+1;
+%         end
+%     else
+%         if exist('M1_ch2')
+%             chan = M1_ch1+2;
+%         else
+%             chan = M1_ch1;   % remember, here you are setting P1 to M1
+%         end
+%     end
+% elseif chan == 'P1_ch2'
+%     if M1_ch1 < 5
+%         if exist('M1_ch2')
+%             chan = M1_ch2+2;
+%         else
+%             chan = M1_ch1+1;
+%         end
+%     else
+%         if exist('M1_ch2')
+%             chan = M1_ch2+2;
+%         else
+%             chan = M1_ch1;   % remember, here you are setting P1 to M1
+%         end
+%     end
+% end
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     spectrogramPD.M1 = timePSD_grp_data;
     spectrogramPD.M1mean = mean(spectrogramPD.M1,3); 
     spectrogramPD.M1std = std(spectrogramPD.M1,0,3); 
@@ -155,7 +215,7 @@ function nr_timePSD_grp(timePSD_grp_data,dz,chan,phase)
 %         stdPDspect(:,:,i);
 %     end
 
-save(['var_timePSD_grp_',dz,'_',chan,'_',phase])
+save(['var_timePSD_grp_',dz,'_',cond,'_',chan,'_',phase])
 %% Repeat for S1
 % spectrogramPD.S1mean = mean(spectrogramPD.S1,3); 
 %     spectrogramPD.S1std = std(spectrogramPD.S1,0,3); 

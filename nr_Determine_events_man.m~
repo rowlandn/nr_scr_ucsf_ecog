@@ -60,7 +60,7 @@ n_steps = str2num(n_steps(length(n_steps)))-1;
 % n_trials = ipad.data.description{end-1};
 % n_trials = str2num(n_trials(length(n_trials)))+1;
 
-n_trials = 20;
+%n_trials = 20;
 % Sound
 [sound]=strfind(ipad.data.description,'Sound');
 sound = cellfun('isempty',sound);
@@ -170,6 +170,53 @@ n_ecog = size(ecog.contact_pair,2);
     nr_Determine_move_on_off(filename)
 % end
 
+
+%% Determine 2-second epochs
+
+load(filename)
+
+EPOCH_LEN = 2*Fs; 
+num_contact_pair = length(ecog.contact_pair);
+num_epoch = length(ecog.rest_time);
+
+% initialize structures that will contain all rest/active analysis
+rest = struct('contact_pair',{});
+prep = struct('contact_pair',{});
+active = struct('contact_pair',{});
+
+for i = 1:num_contact_pair
+    for j = 1:num_epoch
+        
+        % rest
+        if j==1
+            start_rest = int32(ecog.ipad_ON_time(j));
+        else
+            start_rest = int32(ecog.rest_time(j));
+        end
+        end_rest = int32(ecog.prep_time(j));
+        %assignin('base','rest2',rest)
+        %t = start_rest + (end_rest - start_rest)/2;% psd computed using 2s of rest in the middle of that period
+        %rest(1).contact_pair(i).epoch(j).remontaged_ecog_signal = ecog.contact_pair(i).remontaged_ecog_signal(t-EPOCH_LEN:t+EPOCH_LEN);
+        rest(1).contact_pair(i).epoch(j).remontaged_ecog_signal = ecog.contact_pair(i).remontaged_ecog_signal(end_rest-EPOCH_LEN:end_rest);
+        rest(1).contact_pair(i).epoch(j).time = [end_rest-EPOCH_LEN end_rest];
+        
+        % prep
+        start_prep = int32(ecog.prep_time(j)); 
+        end_prep = int32(ecog.go_time(j));
+        t = start_prep + (end_prep - start_prep)/2;% psd computed using 2s of rest in the middle of that period
+        prep(1).contact_pair(i).epoch(j).remontaged_ecog_signal = ecog.contact_pair(i).remontaged_ecog_signal(t-EPOCH_LEN/2:t+EPOCH_LEN/2);
+        prep(1).contact_pair(i).epoch(j).time = [t-EPOCH_LEN/2 t+EPOCH_LEN/2];
+        
+        % active
+        start_active = int32(ecog.active_time(j)); 
+        %end_active = int32(ecog.end_time(j));
+        %t = start_active + (end_active - start_active)/2;% psd computed using 2s of rest in the middle of that period
+        %active(1).contact_pair(i).epoch(j).remontaged_ecog_signal = ecog.contact_pair(i).remontaged_ecog_signal(t-EPOCH_LEN:t+EPOCH_LEN);
+        active(1).contact_pair(i).epoch(j).remontaged_ecog_signal = ecog.contact_pair(i).remontaged_ecog_signal(start_active:start_active+EPOCH_LEN);
+        active(1).contact_pair(i).epoch(j).time = [start_active start_active+EPOCH_LEN];
+    end
+end
+
 %% Plot raw data
 
 % figure
@@ -203,17 +250,32 @@ n_ecog = size(ecog.contact_pair,2);
 % end
 % % save figure
 % saveas(gcf,[name(1:end-4) '_raw'],'fig');
-load(filename)
-trials_ok = 1:size(Time_events,1);
-bad_trials = input('bad_trials: ');
-%assigning('base','bad_trials1',bad_trials)
-% bad_trials = find(ecog.bad_move_on_time~=0);
-% assignin('base','bad_trials2',bad_trials)
-if ~isempty(bad_trials)
-trials_ok = setdiff(trials_ok,bad_trials);
+
+
+for i = 1:length(active.contact_pair(M1_ch1).epoch)
+    if active.contact_pair(M1_ch1).epoch(i).time(1) < ecog.go_time(i)
+        trials_ok(i) = 0;
+    elseif
+        trials_ok(i) = i;
+    end
 end
+
+
+
+% load(filename)
+% if exist('trials_ok')
+% else
+%     trials_ok = 1:size(Time_events,1);
+%     bad_trials = input('bad_trials: ');
+%     %assigning('base','bad_trials1',bad_trials)
+%     % bad_trials = find(ecog.bad_move_on_time~=0);
+%     % assignin('base','bad_trials2',bad_trials)
+%     if ~isempty(bad_trials)
+%     trials_ok = setdiff(trials_ok,bad_trials);
+%     end
+% end
 n_ecog = size(ecog.contact_pair,2);
-save(filename,'trials_ok','n_ecog','-append')
+save(filename,'trials_ok','n_ecog','rest','prep','active','-append')
 
 
 % % Find 'Correct touch'

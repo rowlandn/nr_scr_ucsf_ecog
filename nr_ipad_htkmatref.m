@@ -1,6 +1,6 @@
 function nr_ipad_htkmatref(htkmatconv_dir,cond,chan1,chan2,chan3,chan4,chan5,chan6,chan7,chan8,...
-                           M1_ch1,M1_ch2,n_trials,json_filename,json_mat_conv_dir,...
-                           htkmatref_filedir)
+                           M1_ch1,M1_ch2,n_trials,json_filename,htkmatref_filedir)
+                           
                        
                        
 %% Parse subject ID and append 'sum' to filename
@@ -14,7 +14,7 @@ end
 
 htkmatconv_dir_slash = strfind(htkmatconv_dir,'/');
 find_dir = htkmatconv_dir_slash(end);
-htkmatconv_sum_filename = ['sum_',sbj,'_ipad_',cond];
+htkmatconv_sum_filename = ['dat_',sbj,'_ipad_',cond];
                                            
 %% load the data and store processed Aux chan data into structure array
 cd(htkmatconv_dir)
@@ -197,7 +197,11 @@ end
     ecog(1).ipad_OFF_time= int32(ipad_OFF_time(GOOD));
     
     
-    
+%% load ecog traces into matrix for eegplot
+
+for i = 1:size(ecog.contact_pair,2)
+    ecog_traces(i,:) = ecog.contact_pair(i).remontaged_ecog_signal;
+end
 
 
 %% Parse json file for timestamps
@@ -325,6 +329,6 @@ ipad.events_sc.touch_ON_sc = ipad_touch_ON_shift;
 %% save data
 
 cd(htkmatref_filedir)
-save(htkmatconv_sum_filename,'auxchan_lbl','M1_ch1','M1_ch2','n_trials','aux','emg','ecog','Fs','thresh','ipad');
+save(htkmatconv_sum_filename,'auxchan_lbl','M1_ch1','M1_ch2','n_trials','aux','emg','ecog','Fs','thresh','ipad','GOOD','ecog_traces');
 
 

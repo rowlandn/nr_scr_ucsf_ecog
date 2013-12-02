@@ -12,7 +12,7 @@ elseif ~isempty(strfind(spec_data,'ec_'))
 end
 
 load(spec_data)
-load_sum_eval = ['load sum_',sbj,'_ipad_prelead'];
+load_sum_eval = ['load sum_',sbj,'_ipad_postlead'];
 eval(load_sum_eval)
 
 %% define variables
@@ -37,13 +37,67 @@ elseif chan == 'S1_ch2'
     else
         chan = M1_ch1-1;
     end
+elseif chan == 'P1_ch1'
+    if M1_ch1 < 5
+        if exist('M1_ch2')
+            chan = M1_ch1+2;
+        else
+            chan = M1_ch1+1;
+        end
+    else
+        if exist('M1_ch2')
+            chan = M1_ch1+2;
+        else
+            chan = M1_ch1;   % remember, here you are setting P1 to M1
+        end
+    end
+elseif chan == 'P1_ch2'
+    if M1_ch1 < 5
+        if exist('M1_ch2')
+            chan = M1_ch2+2;
+        else
+            chan = M1_ch1+1;
+        end
+    else
+        if exist('M1_ch2')
+            chan = M1_ch2+2;
+        else
+            chan = M1_ch1;   % remember, here you are setting P1 to M1
+        end
+    end
 end
 
-if isempty(get(0,'Children'))
-    fig_han = figure;
-else
-    figure(fig_han)
-end
+
+% if chan == 'M1_ch1'
+%     chan = M1_ch1;
+% elseif chan == 'M1_ch2'
+%     if exist('M1_ch2')
+%         chan = M1_ch2;
+%     else
+%         chan = M1_ch1;
+%     end
+% elseif chan == 'S1_ch1'
+%     if exist('M1_ch2')
+%         chan = M1_ch1-2;
+%     else
+%         chan = M1_ch1-1;
+%     end
+% elseif chan == 'S1_ch2'
+%     if exist('M1_ch2')
+%         chan = M1_ch2-2;
+%     else
+%         chan = M1_ch1-1;
+%     end
+% end
+
+% if isempty(get(0,'Children'))
+%     fig_han = figure;
+% else
+%     %fig_han = figure;
+%     figure(fig_han)
+% end
+
+figure(fig_han)
 
 %% create plot
 

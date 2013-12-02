@@ -232,7 +232,7 @@ for kk = 1:length(pts(:,1))
     MI_means = [MI_means; mean(mean(Comodulogram_surr(kk,4:end,:)))];
     Phase_means = [Phase_means; mean(mean(Comodulogram_phase(kk,4:end,:)))];
 end
-    %% Graph comodulogram
+%     %% Graph comodulogram
 figure
 plot([1:length(MI_means)],MI_means,'k*')
 x=find(pts(:,3)==2);
@@ -240,7 +240,7 @@ hold on
 plot(x,MI_means(x),'r*')
 x=find(pts(:,3)==3);
 plot(x,MI_means(x),'g*')
-%saveas(gcf,[sum_filedirnm '_Com_time'],'fig');
+saveas(gcf,[sum_filedirnm '_Com_time'],'fig');
 %% test
 [P,ANOVATAB,STATS] = kruskalwallis(MI_means,pts(:,3));
 title(P)

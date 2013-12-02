@@ -327,20 +327,20 @@ set(gca,'YLim',[-2 5.5])
 
 % plot results of Determine Events
 for i = 1:length(ecog.active_time)
-plot([ecog.active_time(i):10:ecog.rest_time(i)],2.5,'color',[0.5 0.5 0.5],'Marker','.','MarkerSize',8)
+plot([ecog.active_time(i):2:ecog.rest_time(i)],2.5,'color',[0.5 0.5 0.5],'Mar)
 end
 
 % plot results from 2-second epochs
 for i = 1:length(rest.contact_pair(M1_ch1).epoch)
-    plot(rest.contact_pair(M1_ch1).epoch(i).time(1):10:rest.contact_pair(M1_ch1).epoch(i).time(2),2.8,'r.')
+    plot(rest.contact_pair(M1_ch1).epoch(i).time(1):5:rest.contact_pair(M1_ch1).epoch(i).time(2),2.8,'r.')
 end
 
 for i = 1:length(prep.contact_pair(M1_ch1).epoch)
-    plot(prep.contact_pair(M1_ch1).epoch(i).time(1):10:prep.contact_pair(M1_ch1).epoch(i).time(2),2.7,'b.')
+    plot(prep.contact_pair(M1_ch1).epoch(i).time(1):5:prep.contact_pair(M1_ch1).epoch(i).time(2),2.7,'b.')
 end
 
 for i = 1:length(active.contact_pair(M1_ch1).epoch)
-    plot(active.contact_pair(M1_ch1).epoch(i).time(1):10:active.contact_pair(M1_ch1).epoch(i).time(2),2.6,'g.')
+    plot(active.contact_pair(M1_ch1).epoch(i).time(1):5:active.contact_pair(M1_ch1).epoch(i).time(2),2.6,'g.')
 end
 
 
