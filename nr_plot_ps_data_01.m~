@@ -327,22 +327,76 @@ set(gca,'YLim',[-2 5.5])
 
 % plot results of Determine Events
 for i = 1:length(ecog.active_time)
-plot([ecog.active_time(i):2:ecog.rest_time(i)],2.5,'color',[0.5 0.5 0.5],'Mar)
+plot([ecog.active_time(i):50:ecog.rest_time(i)],2.5,'color',[0.5 0.5 0.5],'Marker','.','MarkerSize',8)
 end
 
 % plot results from 2-second epochs
 for i = 1:length(rest.contact_pair(M1_ch1).epoch)
-    plot(rest.contact_pair(M1_ch1).epoch(i).time(1):5:rest.contact_pair(M1_ch1).epoch(i).time(2),2.8,'r.')
+    plot(rest.contact_pair(M1_ch1).epoch(i).time(1):50:rest.contact_pair(M1_ch1).epoch(i).time(2),2.8,'r.')
 end
 
 for i = 1:length(prep.contact_pair(M1_ch1).epoch)
-    plot(prep.contact_pair(M1_ch1).epoch(i).time(1):5:prep.contact_pair(M1_ch1).epoch(i).time(2),2.7,'b.')
+    plot(prep.contact_pair(M1_ch1).epoch(i).time(1):50:prep.contact_pair(M1_ch1).epoch(i).time(2),2.7,'b.')
 end
 
 for i = 1:length(active.contact_pair(M1_ch1).epoch)
-    plot(active.contact_pair(M1_ch1).epoch(i).time(1):5:active.contact_pair(M1_ch1).epoch(i).time(2),2.6,'g.')
+    plot(active.contact_pair(M1_ch1).epoch(i).time(1):50:active.contact_pair(M1_ch1).epoch(i).time(2),2.6,'g.')
 end
 
 
+
+wichAxis = 'x';
+minscroll = 1;
+maxscroll = size(ecog_traces,2);
+initialValue = minscroll;
+width = size(ecog_traces,2)/2;
+% x = min : max;
+% 
+% bar(x,x);
+
+pos = get(gca,'position');
+new_pos=[pos(1) pos(2)-0.1 pos(3) 0.05];
+
+charLabel = @(axisHandle, farglist)( ...
+    set(axisHandle, 'XTickLabel',( ...
+    char(get(axisHandle,'XTick') + 96) ...
+    )') ...
+    );
+
+panScrollZoom(gca, wichAxis, minscroll, maxscroll, initialValue, width, new_pos, charLabel, {})
+
+%function scrollplotdemo
+%%%%% Generate and plot data
+% x=0:1e-2:2*pi;
+% y=sin(x);
+% dx=2;
+% % if exist('M1_ch2')
+% %         plot(ecogchan_M1_ch2_plus_std_norm_1+4,'color',[0.5 0.5 0.5])
+% %     end
+% 
+% 
+% % % dx is the width of the axis 'window'
+% a=gca;
+% %p=plot(x,y);
+% %%%%% Set appropriate axis limits and settings
+% set(gcf,'doublebuffer','on');
+% % This avoids flickering when updating the axis
+% set(a,'xlim',[0 dx]);
+% %set(a,'ylim',[min(y) max(y)]);
+% %%%%% Generate constants for use in uicontrol initialization
+% pos=get(a,'position');
+% Newpos=[pos(1) pos(2)-0.1 pos(3) 0.05];
+% % This will create a slider which is just underneath the axis
+% % but still leaves room for the axis labels above the slider
+% xmax = length(ecogchan_M1_ch2_plus_std_norm_1);
+% 
+% %xmax=max();
+% S=['set(gca,''xlim'',get(gcbo,''value'')+[0 ' num2str(dx) '])'];
+% % Setting up callback string to modify XLim of axis (gca)
+% % based on the position of the slider (gcbo)
+% %%%%% Creating Uicontrol
+% h=uicontrol('style','slider',...
+%       'units','normalized','position',Newpos,...
+%       'callback',S,'min',0,'max',xmax-dx);
 
 

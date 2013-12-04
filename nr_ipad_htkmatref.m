@@ -206,7 +206,8 @@ end
 
 %% Parse json file for timestamps
 
-[description, timestamp] = nr_import_from_ipad_02(json_filename);
+%[description, timestamp] = nr_import_from_ipad_02(json_filename);
+
 
 n_steps = description{2};
 n_steps = str2num(n_steps(length(n_steps)))-1;
